@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { useParams, Link } from "react-router";
+import { useParams, Link, useNavigate } from "react-router";
 import { useAuth } from "../context/AuthContext";
-import { getCategoryById } from "../services/category.service";
+import { getCategoryById, updateCategory, deleteCategory } from "../services/category.service";
 import { getAllEvents } from "../services/event.service";
 import type { Category } from "../interfaces/category.interface";
 import type { Event } from "../interfaces/event.interface";
@@ -20,6 +20,66 @@ const CategoryDetail = () => {
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  // Estados para Edición de Categoría
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [editName, setEditName] = useState<string>("");
+  const [editDescription, setEditDescription] = useState<string>("");
+  const [savingEdit, setSavingEdit] = useState<boolean>(false);
+
+  const navigate = useNavigate();
+
+  // Función para Iniciar Modo Edición
+  const handleStartEdit = () => {
+    if (category) {
+      setEditName(category.name);
+      setEditDescription(category.description || "");
+      setIsEditing(true);
+    }
+  };
+
+  // Función para Guardar Cambios de Edición
+  const handleSaveEdit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!id || !editName.trim()) return;
+    setSavingEdit(true);
+    try {
+      const updated = await updateCategory(id, {
+        name: editName.trim(),
+        description: editDescription.trim(),
+      });
+      setCategory(updated);
+      setIsEditing(false);
+      alert("Categoría actualizada con éxito.");
+    } catch (err: any) {
+      console.error("Error al actualizar categoría:", err);
+      alert(err.friendlyMessage || "No se pudo actualizar la categoría.");
+    } finally {
+      setSavingEdit(false);
+    }
+  };
+
+  // Función para Eliminar Categoría
+  const handleDeleteCategory = async () => {
+    if (events.length > 0) {
+      alert(`No se puede eliminar la categoría porque tiene ${events.length} evento(s) asignado(s).`);
+      return;
+    }
+
+    const confirmDelete = window.confirm(
+      `¿Estás seguro de que deseas eliminar la categoría "${category?.name}"?`
+    );
+    if (!confirmDelete || !id) return;
+
+    try {
+      await deleteCategory(id);
+      alert("Categoría eliminada exitosamente.");
+      navigate("/categories");
+    } catch (err: any) {
+      console.error("Error al eliminar categoría:", err);
+      alert(err.friendlyMessage || "Ocurrió un error al intentar eliminar la categoría.");
+    }
+  };
 
   useEffect(() => {
     const fetchCategoryAndEvents = async () => {
@@ -73,27 +133,96 @@ const CategoryDetail = () => {
       ) : (
         // Contenido Principal
         <div>
-          {/* Encabezado de la Categoría */}
-          <div className="bg-white border border-slate-200/80 rounded-3xl p-8 shadow-sm mb-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-            <div>
-              <span className="text-xs font-bold uppercase tracking-wider text-blue-600">Detalle de Categoría</span>
-              <h1 className="text-3xl font-black text-slate-800 tracking-tight mt-1">{category.name}</h1>
-              <p className="text-slate-500 text-sm md:text-base mt-2 max-w-2xl leading-relaxed">
-                {category.description || "Esta categoría no posee una descripción cargada en el sistema."}
-              </p>
-            </div>
-            
-            {/* Botón visible solo para usuarios Autenticados (Admin rol) */}
-            {user?.role === "admin" && (
-              <Link
-                to={`/events/new?categoryId=${category.id}`}
-                className="inline-flex items-center gap-2 bg-linear-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold px-6 py-3.5 rounded-2xl tracking-wide transition-all shadow-md shadow-indigo-600/10 hover:scale-[1.01] active:scale-[0.99] shrink-0"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
-                </svg>
-                Agregar evento a esta categoría
-              </Link>
+          {/* Encabezado de la Categoría (Vista o Formulario de Edición) */}
+          <div className="bg-white border border-slate-200/80 rounded-3xl p-8 shadow-sm mb-10">
+            {isEditing ? (
+              // FORMULARIO DE EDICIÓN
+              <form onSubmit={handleSaveEdit} className="space-y-4">
+                <span className="text-xs font-bold uppercase tracking-wider text-blue-600">Editar Categoría</span>
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold uppercase tracking-wider text-slate-500">Nombre</label>
+                  <input
+                    type="text"
+                    required
+                    value={editName}
+                    onChange={(e) => setEditName(e.target.value)}
+                    className="w-full bg-slate-50 border border-slate-200/80 focus:border-blue-500 focus:bg-white text-slate-800 px-4 py-2.5 rounded-2xl text-sm font-medium outline-none"
+                    placeholder="Nombre de la categoría"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold uppercase tracking-wider text-slate-500">Descripción</label>
+                  <textarea
+                    rows={3}
+                    value={editDescription}
+                    onChange={(e) => setEditDescription(e.target.value)}
+                    className="w-full bg-slate-50 border border-slate-200/80 focus:border-blue-500 focus:bg-white text-slate-800 px-4 py-2.5 rounded-2xl text-sm font-medium outline-none resize-none"
+                    placeholder="Descripción de la categoría"
+                  />
+                </div>
+                <div className="flex items-center gap-3 pt-2">
+                  <button
+                    type="submit"
+                    disabled={savingEdit}
+                    className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-2.5 rounded-2xl text-sm transition-all cursor-pointer disabled:opacity-50"
+                  >
+                    {savingEdit ? "Guardando..." : "Guardar Cambios"}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setIsEditing(false)}
+                    className="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-5 py-2.5 rounded-2xl text-sm transition-all cursor-pointer"
+                  >
+                    Cancelar
+                  </button>
+                </div>
+              </form>
+            ) : (
+              // VISTA NORMAL
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div>
+                  <span className="text-xs font-bold uppercase tracking-wider text-blue-600">Detalle de Categoría</span>
+                  <h1 className="text-3xl font-black text-slate-800 tracking-tight mt-1">{category.name}</h1>
+                  <p className="text-slate-500 text-sm md:text-base mt-2 max-w-2xl leading-relaxed">
+                    {category.description || "Esta categoría no posee una descripción cargada en el sistema."}
+                  </p>
+                </div>
+                
+                {/* Botones de Acción (Admin) */}
+                {user?.role === "admin" && (
+                  <div className="flex flex-wrap items-center gap-3 shrink-0">
+                    <button
+                      onClick={handleStartEdit}
+                      className="inline-flex items-center gap-2 bg-amber-50 hover:bg-amber-100 text-amber-700 font-bold px-4 py-3 rounded-2xl border border-amber-200 transition-all cursor-pointer"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                      </svg>
+                      Editar
+                    </button>
+
+                    <button
+                      onClick={handleDeleteCategory}
+                      className="inline-flex items-center gap-2 bg-red-50 hover:bg-red-100 text-red-600 font-bold px-4 py-3 rounded-2xl border border-red-200 transition-all cursor-pointer"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
+                      Eliminar
+                    </button>
+
+                    <Link
+                      to={`/events/new?categoryId=${category.id}`}
+                      className="inline-flex items-center gap-2 bg-linear-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold px-5 py-3 rounded-2xl tracking-wide transition-all shadow-md shadow-indigo-600/10 hover:scale-[1.01] active:scale-[0.99]"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
+                      </svg>
+                      Agregar evento
+                    </Link>
+                  </div>
+                )}
+              </div>
             )}
           </div>
 
