@@ -2,8 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import { getAllFavorites } from "../../services/favorite.service";
 import type { Event } from "../../interfaces/event.interface";
-import FavoriteButton from "../../components/FavoriteButton";
-import { formatPrice } from "../../utils";
+import EventCard from "../../components/EventCard";
 
 const FavoritesList = () => {
   const [favorites, setFavorites] = useState<Event[]>([]);
@@ -31,7 +30,7 @@ const FavoritesList = () => {
     <div className="max-w-6xl mx-auto px-4 md:px-8 py-12">
       {/* Encabezado */}
       <div className="mb-10">
-        <h1 className="text-3xl font-black text-slate-805 tracking-tight">Mis Favoritos</h1>
+        <h1 className="text-3xl font-black text-slate-805 tracking-tight font-heading">Mis Favoritos</h1>
         <p className="text-slate-500 mt-1 leading-relaxed">
           Aquí encontrarás todos los eventos que has marcado como tus preferidos.
         </p>
@@ -66,75 +65,24 @@ const FavoritesList = () => {
             to="/events"
             className="inline-flex items-center justify-center bg-slate-900 hover:bg-slate-800 text-white font-bold px-6 py-3.5 rounded-2xl tracking-wide transition-all shadow-sm hover:scale-105 active:scale-95"
           >
-            Explorar Tienda
+            Explorar Eventos
           </Link>
         </div>
       ) : (
         // Grid de favoritos
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {favorites.map((event) => {
-            const imageUrl = event.images && event.images.length > 0 
-              ? (typeof event.images[0] === "string" ? event.images[0] : (event.images[0] as any).url) 
-              : null;
-            return (
-              <div
-                key={event.id}
-                className="bg-white border border-slate-200/80 rounded-3xl overflow-hidden hover:scale-[1.01] hover:shadow-md hover:border-blue-500/30 transition-all duration-200 flex flex-col justify-between group shadow-sm animate-fadeIn"
-              >
-                <div>
-                  {/* Imagen */}
-                  <div className="h-44 w-full bg-white relative flex items-center justify-center overflow-hidden">
-                    <FavoriteButton
-                      eventId={event.id}
-                      isFavorite={true}
-                      onToggle={(isFav) => {
-                        if (!isFav) {
-                          setFavorites((prev) => prev.filter((p) => p.id !== event.id));
-                        }
-                      }}
-                      className="absolute top-3 left-3 z-10"
-                    />
-                    {imageUrl ? (
-                      <img
-                        src={imageUrl}
-                        alt={event.name}
-                        className="object-cover h-full w-full group-hover:scale-105 transition-transform duration-300"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).src = "https://placehold.co/600x400/f1f5f9/94a3b8?text=Sin+Imagen";
-                        }}
-                      />
-                    ) : (
-                      <span className="text-slate-400 text-sm font-medium">Sin imagen</span>
-                    )}
-                  </div>
-
-                  {/* Detalles */}
-                  <div className="p-5">
-                    <h3 className="font-bold text-base text-slate-800 group-hover:text-blue-600 transition-colors line-clamp-1">
-                      {event.name}
-                    </h3>
-                    <p className="text-slate-450 text-[10px] font-bold uppercase tracking-wider mt-0.5">
-                      {event.category?.name || "General"}
-                    </p>
-                    <p className="text-slate-500 text-xs mt-2 line-clamp-2 leading-relaxed">
-                      {event.description || "Sin descripción disponible."}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Footer */}
-                <div className="p-5 pt-0 border-t border-slate-50 flex items-center justify-between">
-                  <span className="text-lg font-black text-slate-850">{formatPrice(event.price)}</span>
-                  <Link
-                    to={`/events/${event.id}`}
-                    className="text-xs font-bold text-blue-600 hover:text-blue-700 hover:underline"
-                  >
-                    Ver detalle
-                  </Link>
-                </div>
-              </div>
-            );
-          })}
+          {favorites.map((event) => (
+            <EventCard
+              key={event.id}
+              event={event}
+              isFavorite={true}
+              onFavoriteToggle={(isFav) => {
+                if (!isFav) {
+                  setFavorites((prev) => prev.filter((p) => p.id !== event.id));
+                }
+              }}
+            />
+          ))}
         </div>
       )}
     </div>

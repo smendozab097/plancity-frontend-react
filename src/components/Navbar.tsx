@@ -14,10 +14,10 @@ const Navbar = () => {
   };
 
   const navLinkClass = ({ isActive }: { isActive: boolean }) =>
-    `relative px-3.5 py-1.5 rounded-xl text-sm font-semibold transition-all duration-200 ${
+    `relative px-3.5 py-1.5 text-sm font-semibold transition-all duration-50 ${
       isActive
-        ? "text-blue-600 bg-blue-50/80 font-bold shadow-xs"
-        : "text-slate-600 hover:text-blue-600 hover:bg-slate-50"
+        ? "text-blue-600 border-b-2 border-blue-500 font-extrabold"
+        : "text-slate-700 hover:text-blue-600 hover:border-b-1 border-blue-500"
     }`;
 
   const mobileNavLinkClass = ({ isActive }: { isActive: boolean }) =>

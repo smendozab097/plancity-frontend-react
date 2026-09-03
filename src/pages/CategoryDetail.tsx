@@ -5,8 +5,7 @@ import { getCategoryById, updateCategory, deleteCategory } from "../services/cat
 import { getAllEvents } from "../services/event.service";
 import type { Category } from "../interfaces/category.interface";
 import type { Event } from "../interfaces/event.interface";
-import FavoriteButton from "../components/FavoriteButton";
-import { formatPrice } from "../utils";
+import EventCard from "../components/EventCard";
 
 const CategoryDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -272,74 +271,20 @@ const CategoryDetail = () => {
           ) : (
             // Grid de eventos
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {events.map((event) => {
-                const imageUrl = event.images && event.images.length > 0 
-                  ? (typeof event.images[0] === "string" ? event.images[0] : (event.images[0] as any).url) 
-                  : null;
-                return (
-                  <div 
-                  key={event.id} 
-                  className="group bg-white border border-slate-200/60 rounded-3xl overflow-hidden hover:shadow-xl hover:shadow-slate-100/80 hover:border-slate-300/80 transition-all flex flex-col h-full relative"
-                >
-                  {/* Botón Flotante de Favoritos */}
-                  <div className="absolute top-4 left-4 z-10">
-                    <FavoriteButton
-                      eventId={event.id}
-                      isFavorite={favoriteIds.includes(event.id)}
-                      onToggle={(isFav) => {
-                        if (isFav) {
-                          setFavoriteIds((prev) => [...prev, event.id]);
-                        } else {
-                          setFavoriteIds((prev) => prev.filter((id) => id !== event.id));
-                        }
-                      }}
-                    />
-                  </div>
-
-                  {/* Imagen del evento */}
-                  <div className="aspect-square w-full bg-slate-50 relative overflow-hidden flex items-center justify-center border-b border-slate-100 shrink-0">
-                    {imageUrl ? (
-                      <img
-                        src={imageUrl}
-                        alt={event.name}
-                        className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
-                        loading="lazy"
-                      />
-                    ) : (
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                      </svg>
-                    )}
-                  </div>
-
-                  {/* Cuerpo de la Tarjeta */}
-                  <div className="p-5 grow flex flex-col justify-between">
-                    <div className="space-y-1">
-                      <h3 className="font-bold text-slate-800 text-sm group-hover:text-blue-600 transition-colors line-clamp-1 leading-snug">
-                        {event.name}
-                      </h3>
-                      <p className="text-[10px] font-black uppercase tracking-wider text-blue-600">
-                        {event.category?.name || "General"}
-                      </p>
-                      <p className="text-slate-500 text-xs mt-2 line-clamp-2 leading-relaxed">
-                        {event.description || "Sin descripción disponible."}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Footer */}
-                  <div className="p-5 pt-0 border-t border-slate-50 flex items-center justify-between">
-                    <span className="text-lg font-black text-slate-850">{formatPrice(event.price)}</span>
-                    <Link
-                      to={`/events/${event.id}`}
-                      className="text-xs font-bold text-blue-600 hover:text-blue-700 hover:underline"
-                    >
-                      Ver detalle
-                    </Link>
-                  </div>
-                </div>
-                );
-              })}
+              {events.map((event) => (
+                <EventCard
+                  key={event.id}
+                  event={event}
+                  isFavorite={favoriteIds.includes(event.id)}
+                  onFavoriteToggle={(isFav) => {
+                    if (isFav) {
+                      setFavoriteIds((prev) => [...prev, event.id]);
+                    } else {
+                      setFavoriteIds((prev) => prev.filter((id) => id !== event.id));
+                    }
+                  }}
+                />
+              ))}
             </div>
           )}
         </div>
