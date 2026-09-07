@@ -14,37 +14,39 @@ const Navbar = () => {
   };
 
   const navLinkClass = ({ isActive }: { isActive: boolean }) =>
-    `relative px-3.5 py-1.5 text-sm font-semibold transition-all duration-50 ${
+    `relative px-3.5 py-1.5 text-sm font-semibold transition-all duration-150 ${
       isActive
-        ? "text-blue-600 border-b-2 border-blue-500 font-extrabold"
-        : "text-slate-700 hover:text-blue-600 hover:border-b-1 border-blue-500"
+        ? "text-blue-400 border-b-2 border-blue-500 font-bold drop-shadow-[0_0_10px_rgba(59,130,246,0.4)]"
+        : "text-slate-300 hover:text-white hover:border-b-2 border-blue-500/30"
     }`;
 
   const mobileNavLinkClass = ({ isActive }: { isActive: boolean }) =>
-    `flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold transition-all ${
+    `flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all ${
       isActive
-        ? "text-blue-600 bg-blue-50 font-bold"
-        : "text-slate-600 hover:text-blue-600 hover:bg-slate-50"
+        ? "text-blue-300 bg-blue-600/15 border border-blue-500/30 font-bold"
+        : "text-slate-300 hover:text-white hover:bg-slate-800/60"
     }`;
 
   return (
-    <header className="h-16 bg-white/85 backdrop-blur-md border-b border-slate-200/70 sticky top-0 z-50 shadow-xs transition-all">
+    <header className="h-16 bg-[#0b1120]/90 backdrop-blur-xl border-b border-slate-800/80 sticky top-0 z-50 shadow-md shadow-black/30 transition-all">
       <nav className="h-full flex items-center justify-between max-w-6xl mx-auto px-4 md:px-8">
         
-        {/* Logotipo con micro-interacción */}
+        {/* Logotipo en Azul y Blanco con punto de luz */}
         <div className="flex items-center gap-8">
           <Link
             to="/"
-            className="group flex items-center gap-2.5 tracking-tight font-black text-xl text-slate-800"
+            className="group flex items-center gap-2.5 tracking-tight font-black text-xl text-white"
           >
-            <div className="h-9 w-9 rounded-xl bg-linear-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-blue-500/20 group-hover:scale-105 group-hover:rotate-3 transition-transform">
+            <div className="relative h-9 w-9 rounded-xl bg-linear-to-br from-blue-600 to-blue-700 flex items-center justify-center text-white shadow-md shadow-blue-600/30 group-hover:scale-105 transition-transform">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8z"/>
                 <circle cx="12" cy="10" r="3"/>
               </svg>
+              {/* Punto de actividad en azul cielo */}
+              <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-sky-400 rounded-full ring-2 ring-[#0b1120]"></span>
             </div>
-            <span className="bg-linear-to-r from-slate-900 via-slate-800 to-blue-600 bg-clip-text text-transparent font-heading">
-              Plan<span className="text-blue-600">City</span>
+            <span className="text-white font-heading font-extrabold tracking-tight">
+              Plan<span className="text-blue-400">City</span>
             </span>
           </Link>
 
@@ -78,28 +80,28 @@ const Navbar = () => {
         {/* Zona de Usuario / Acciones (Desktop) */}
         <div className="hidden md:flex items-center gap-3">
           {user ? (
-            <div className="flex items-center gap-3 bg-slate-50/80 border border-slate-200/60 pl-3 pr-1.5 py-1.5 rounded-2xl">
+            <div className="flex items-center gap-3 bg-[#0f172a] border border-slate-800 pl-3 pr-1.5 py-1.5 rounded-xl shadow-xs">
               <div className="flex items-center gap-2">
-                <div className="h-7 w-7 rounded-lg bg-linear-to-br from-slate-700 to-slate-900 text-white text-xs font-bold flex items-center justify-center uppercase shadow-xs">
+                <div className="h-7 w-7 rounded-lg bg-blue-600 text-white text-xs font-bold flex items-center justify-center uppercase shadow-xs">
                   {user.name.charAt(0)}
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <span className="text-xs font-semibold text-slate-700 max-w-28 truncate">
+                  <span className="text-xs font-semibold text-slate-200 max-w-28 truncate">
                     {user.name}
                   </span>
                   {user.role === "admin" && (
-                    <span className="bg-linear-to-r from-blue-600 to-indigo-600 text-white text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md shadow-xs">
+                    <span className="bg-blue-600/20 text-blue-300 border border-blue-500/30 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md">
                       Admin
                     </span>
                   )}
                 </div>
               </div>
 
-              <div className="h-4 w-px bg-slate-200 mx-1"></div>
+              <div className="h-4 w-px bg-slate-800 mx-1"></div>
 
               <button
                 onClick={handleLogoutClick}
-                className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-red-600 hover:bg-red-50/80 px-2.5 py-1.5 rounded-xl transition-all cursor-pointer"
+                className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-400 hover:text-red-400 hover:bg-red-500/10 px-2.5 py-1.5 rounded-lg transition-all cursor-pointer"
                 title="Cerrar sesión"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -111,7 +113,7 @@ const Navbar = () => {
           ) : (
             <Link
               to="/login"
-              className="inline-flex items-center gap-2 bg-slate-900 hover:bg-blue-600 text-white text-sm font-bold px-5 py-2.5 rounded-2xl transition-all shadow-sm hover:scale-[1.01] active:scale-[0.99]"
+              className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-all shadow-md shadow-blue-600/25 hover:scale-[1.02] active:scale-[0.98]"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
@@ -124,7 +126,7 @@ const Navbar = () => {
         {/* Botón Menú Móvil (Hamburguesa) */}
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="md:hidden p-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors"
+          className="md:hidden p-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
           aria-label="Toggle Menu"
         >
           {mobileMenuOpen ? (
@@ -141,7 +143,7 @@ const Navbar = () => {
 
       {/* Menú Desplegable Móvil */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-white border-b border-slate-200 px-4 py-4 space-y-2 shadow-xl animate-in slide-in-from-top-2 duration-200">
+        <div className="md:hidden bg-[#0f172a] border-b border-slate-800 px-4 py-4 space-y-2 shadow-2xl animate-in slide-in-from-top-2 duration-200">
           <NavLink to="/" className={mobileNavLinkClass} onClick={() => setMobileMenuOpen(false)} end>
             Home
           </NavLink>
@@ -157,21 +159,21 @@ const Navbar = () => {
             </NavLink>
           )}
 
-          <div className="border-t border-slate-100 pt-3 mt-2">
+          <div className="border-t border-slate-800 pt-3 mt-2">
             {user ? (
-              <div className="flex items-center justify-between p-2 bg-slate-50 rounded-2xl">
-                <div className="flex items-center gap-2">
-                  <div className="h-8 w-8 rounded-lg bg-slate-800 text-white text-xs font-bold flex items-center justify-center uppercase">
+              <div className="flex items-center justify-between p-2.5 bg-slate-800/60 rounded-xl border border-slate-700/60">
+                <div className="flex items-center gap-2.5">
+                  <div className="h-8 w-8 rounded-lg bg-blue-600 text-white text-xs font-bold flex items-center justify-center uppercase">
                     {user.name.charAt(0)}
                   </div>
                   <div>
-                    <p className="text-xs font-bold text-slate-800">{user.name}</p>
-                    <p className="text-[10px] text-slate-400 capitalize">{user.role}</p>
+                    <p className="text-xs font-bold text-white">{user.name}</p>
+                    <p className="text-[10px] text-blue-400 capitalize">{user.role}</p>
                   </div>
                 </div>
                 <button
                   onClick={handleLogoutClick}
-                  className="text-xs font-bold text-red-600 hover:bg-red-50 px-3 py-1.5 rounded-xl transition-colors"
+                  className="text-xs font-bold text-red-400 hover:bg-red-500/10 px-3 py-1.5 rounded-lg transition-colors"
                 >
                   Cerrar sesión
                 </button>
@@ -180,7 +182,7 @@ const Navbar = () => {
               <Link
                 to="/login"
                 onClick={() => setMobileMenuOpen(false)}
-                className="w-full inline-flex items-center justify-center gap-2 bg-blue-600 text-white font-bold py-3 rounded-2xl text-sm"
+                className="w-full inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl text-sm shadow-md shadow-blue-600/25"
               >
                 Iniciar sesión
               </Link>

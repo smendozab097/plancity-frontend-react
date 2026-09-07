@@ -1,36 +1,32 @@
-import { Link } from 'react-router'; // Opcional: cámbialo por <a> si no usas react-router
+import { Link } from 'react-router';
 
 const NotFound = () => {
   return (
-    <main className="flex min-h-screen w-full items-center justify-center bg-gray-50 px-6 py-24 sm:py-32 lg:px-8">
-      <div className="text-center max-w-md">
-        {/* Código de error gigante */}
-        <h1 className="text-9xl font-black tracking-tight text-blue-600 sm:text-[12rem] leading-none">
+    <main className="flex min-h-screen w-full items-center justify-center bg-slate-50 text-slate-900 px-6 py-24 sm:py-32 lg:px-8 relative overflow-hidden">
+      <div className="text-center max-w-lg relative z-10 bg-white border border-slate-200/90 p-10 md:p-14 rounded-3xl shadow-xl">
+        <h1 className="text-8xl md:text-9xl font-black tracking-tighter text-blue-600 leading-none">
           404
         </h1>
         
-        {/* Mensaje principal */}
-        <h2 className="mt-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+        <h2 className="mt-6 text-2xl md:text-3xl font-bold tracking-tight text-slate-900">
           ¡Ups! Página no encontrada
         </h2>
         
-        {/* Descripción secundaria */}
-        <p className="mt-6 text-base leading-7 text-gray-600">
-          Lo sentimos, el enlace que seguiste está roto o la página ha sido eliminada por completo.
+        <p className="mt-4 text-sm md:text-base leading-relaxed text-slate-600 max-w-sm mx-auto">
+          Lo sentimos, el enlace que seguiste no existe, está roto o la página ha sido reubicada.
         </p>
         
-        {/* Botón de acción */}
-        <div className="mt-10 flex items-center justify-center gap-x-6">
+        <div className="mt-8 flex items-center justify-center">
           <Link
             to="/"
-            className="rounded-md bg-slate-900 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-blue-600 transition-all duration-200 transform hover:-translate-y-0.5 active:translate-y-0"
+            className="rounded-xl bg-blue-600 hover:bg-blue-500 px-7 py-3.5 text-sm font-bold text-white shadow-md shadow-blue-600/20 transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98]"
           >
             Volver al Inicio
           </Link>
         </div>
       </div>
     </main>
-  )
-}
+  );
+};
 
-export default NotFound
+export default NotFound;

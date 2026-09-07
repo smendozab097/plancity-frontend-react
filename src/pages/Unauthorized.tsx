@@ -2,25 +2,24 @@ import { Link } from 'react-router';
 
 export default function Unauthorized() {
   return (
-    <main className="flex min-h-screen w-full items-center justify-center  bg-linear-to-b from-white to-red-100  px-6 py-24 sm:py-32 lg:px-8">
-      <div className="text-center max-w-md">
-        {/* Código de error 403 (Acceso Prohibido/No Autorizado) */}
-        <h1 className="text-9xl font-black tracking-tight text-red-600 sm:text-[12rem] leading-none">
+    <main className="flex min-h-screen w-full items-center justify-center bg-slate-50 text-slate-900 px-6 py-24 sm:py-32 lg:px-8 relative overflow-hidden">
+      <div className="text-center max-w-lg relative z-10 bg-white border border-slate-200/90 p-10 md:p-14 rounded-3xl shadow-xl">
+        <h1 className="text-8xl md:text-9xl font-black tracking-tighter text-red-500 leading-none">
           403
         </h1>
         
-        <h2 className="mt-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+        <h2 className="mt-6 text-2xl md:text-3xl font-bold tracking-tight text-slate-900">
           Acceso no autorizado
         </h2>
         
-        <p className="mt-6 text-base leading-7 text-gray-600">
-          No tienes los permisos necesarios para ver esta sección. Si crees que esto es un error, contacta al administrador.
+        <p className="mt-4 text-sm md:text-base leading-relaxed text-slate-600 max-w-sm mx-auto">
+          No tienes los permisos necesarios para ver esta sección. Si crees que esto es un error, por favor contacta al administrador del sistema.
         </p>
         
-        <div className="mt-10 flex items-center justify-center gap-x-6">
+        <div className="mt-8 flex items-center justify-center">
           <Link
             to="/"
-            className="rounded-2xl bg-red-600 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-red-600 transition-all duration-200 transform hover:-translate-y-0.5 active:translate-y-0"
+            className="rounded-xl bg-blue-600 hover:bg-blue-500 px-7 py-3.5 text-sm font-bold text-white shadow-md shadow-blue-600/20 transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98]"
           >
             Volver al Inicio
           </Link>

@@ -36,43 +36,38 @@ class ErrorBoundary extends Component<Props, State> {
   public render() {
     if (this.state.hasError) {
       return (
-        <div className="min-h-screen w-full bg-slate-50 flex flex-col items-center justify-center p-8 font-sans">
-          <div className="w-full max-w-md bg-white border border-slate-200/80 rounded-3xl p-10 shadow-xl text-center">
+        <div className="min-h-screen w-full bg-slate-50 text-slate-900 flex flex-col items-center justify-center p-8 relative overflow-hidden">
+          <div className="w-full max-w-md bg-white border border-slate-200/90 rounded-3xl p-10 shadow-xl text-center relative z-10">
             {/* Ícono de peligro */}
-            <div className="h-16 w-16 bg-red-50 border border-red-100 text-red-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
+            <div className="h-16 w-16 bg-red-50 border border-red-200 text-red-500 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-sm">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-9 w-9" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
               </svg>
             </div>
 
-            <h1 className="text-2xl font-black text-slate-800 tracking-tight mb-2">
+            <h1 className="text-2xl font-black text-slate-900 tracking-tight mb-2">
               Algo salió mal en la interfaz
             </h1>
-            <p className="text-slate-500 text-sm leading-relaxed mb-8 max-w-sm mx-auto">
+            <p className="text-slate-600 text-sm leading-relaxed mb-8 max-w-sm mx-auto">
               Un error inesperado interrumpió el renderizado del sistema. Puedes recargar la aplicación para intentar resolverlo.
             </p>
 
-            {/* Botón Wave (Uiverse bitter-parrot-97 replica en Tailwind 100% autocontenido) */}
+            {/* Botón Wave interactivo */}
             <div className="flex justify-center mb-6">
               <button
                 type="button"
                 onClick={this.handleReload}
-                className="group relative inline-flex items-center justify-center h-14 px-9 rounded-full font-bold text-sm tracking-tight text-white cursor-pointer overflow-hidden transition-transform duration-200 active:scale-95 bg-[#2563eb] border border-[#2563eb] shadow-md hover:shadow-lg z-10"
+                className="group relative inline-flex items-center justify-center h-14 px-9 rounded-full font-bold text-sm tracking-tight text-white cursor-pointer overflow-hidden transition-transform duration-200 active:scale-95 bg-blue-600 border border-blue-500 shadow-md hover:shadow-lg z-10"
               >
-                {/* Capas del fondo de la ola */}
                 <span className="absolute inset-0 block rounded-full overflow-hidden pointer-events-none -z-10">
                   <span className="absolute left-1/2 -top-[60%] -translate-x-1/2 aspect-square w-[220%] block">
-                    {/* Capa 1: Púrpura */}
-                    <span className="absolute inset-0 rounded-full bg-[rgb(163,116,255)] scale-0 group-hover:scale-100 transition-transform duration-700 ease-[cubic-bezier(0.19,1,0.22,1)]"></span>
-                    {/* Capa 2: Turquesa */}
-                    <span className="absolute inset-0 rounded-full bg-[rgb(23,241,209)] scale-0 group-hover:scale-100 transition-transform duration-700 delay-80 ease-[cubic-bezier(0.19,1,0.22,1)]"></span>
-                    {/* Capa 3: Azul */}
-                    <span className="absolute inset-0 rounded-full bg-[#2563eb] scale-0 group-hover:scale-100 transition-transform duration-700 delay-160 ease-[cubic-bezier(0.19,1,0.22,1)]"></span>
+                    <span className="absolute inset-0 rounded-full bg-blue-500 scale-0 group-hover:scale-100 transition-transform duration-700 ease-[cubic-bezier(0.19,1,0.22,1)]"></span>
+                    <span className="absolute inset-0 rounded-full bg-sky-400 scale-0 group-hover:scale-100 transition-transform duration-700 delay-80 ease-[cubic-bezier(0.19,1,0.22,1)]"></span>
+                    <span className="absolute inset-0 rounded-full bg-blue-600 scale-0 group-hover:scale-100 transition-transform duration-700 delay-160 ease-[cubic-bezier(0.19,1,0.22,1)]"></span>
                   </span>
                 </span>
                 
-                {/* Texto del botón */}
-                <span className="relative block h-5 w-40 overflow-hidden pointer-events-none">
+                <span className="relative block h-5 w-44 overflow-hidden pointer-events-none">
                   <span className="block transition-all duration-700 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:-translate-y-[120%] group-hover:opacity-0">
                     Recargar Aplicación
                   </span>
@@ -89,7 +84,7 @@ class ErrorBoundary extends Component<Props, State> {
                 <button
                   type="button"
                   onClick={this.toggleDetails}
-                  className="text-xs font-bold text-slate-400 hover:text-slate-600 flex items-center gap-1 mx-auto transition-colors cursor-pointer"
+                  className="text-xs font-bold text-slate-400 hover:text-blue-600 flex items-center gap-1 mx-auto transition-colors cursor-pointer"
                 >
                   <span>{this.state.showDetails ? "Ocultar diagnóstico" : "Ver diagnóstico técnico"}</span>
                   <svg
@@ -104,7 +99,7 @@ class ErrorBoundary extends Component<Props, State> {
                 </button>
                 
                 {this.state.showDetails && (
-                  <pre className="mt-4 p-4 bg-slate-50 border border-slate-150 rounded-2xl text-[11px] font-mono text-slate-600 overflow-x-auto max-h-40 leading-relaxed whitespace-pre-wrap">
+                  <pre className="mt-4 p-4 bg-slate-50 border border-slate-200 rounded-2xl text-[11px] font-mono text-slate-700 overflow-x-auto max-h-40 leading-relaxed whitespace-pre-wrap">
                     {this.state.error.toString()}
                   </pre>
                 )}

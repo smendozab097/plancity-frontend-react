@@ -13,7 +13,7 @@ const FavoriteButton = ({ eventId, isFavorite, onToggle, className = "" }: Favor
 
   const handleToggle = async (e: React.MouseEvent) => {
     e.preventDefault();
-    e.stopPropagation(); // Evitar navegación o propagación a la tarjeta
+    e.stopPropagation();
 
     if (loading) return;
 
@@ -38,15 +38,15 @@ const FavoriteButton = ({ eventId, isFavorite, onToggle, className = "" }: Favor
       type="button"
       onClick={handleToggle}
       disabled={loading}
-      className={`inline-flex items-center justify-center p-2 rounded-full bg-white border border-slate-100 shadow-md hover:shadow-lg transition-all duration-200 hover:scale-110 active:scale-75 disabled:opacity-60 cursor-pointer ${className}`}
+      className={`inline-flex items-center justify-center p-2 rounded-full bg-white/90 backdrop-blur-md border border-slate-200 shadow-sm hover:border-rose-300 hover:shadow-md transition-all duration-200 hover:scale-110 active:scale-90 disabled:opacity-50 cursor-pointer ${className}`}
       aria-label={isFavorite ? "Quitar de favoritos" : "Agregar a favoritos"}
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        className={`h-5 w-5 transition-colors duration-200 ${
+        className={`h-5 w-5 transition-all duration-200 ${
           isFavorite
-            ? "fill-red-500 stroke-red-500"
-            : "fill-transparent stroke-slate-400 hover:stroke-red-500"
+            ? "fill-rose-500 stroke-rose-500 drop-shadow-sm"
+            : "fill-transparent stroke-slate-500 hover:stroke-rose-500"
         }`}
         viewBox="0 0 24 24"
         strokeWidth={2}

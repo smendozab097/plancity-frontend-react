@@ -29,7 +29,6 @@ const CategoryDetail = () => {
 
   const navigate = useNavigate();
 
-  // Función para Iniciar Modo Edición
   const handleStartEdit = () => {
     if (category) {
       setEditName(category.name);
@@ -38,7 +37,6 @@ const CategoryDetail = () => {
     }
   };
 
-  // Función para Guardar Cambios de Edición
   const handleSaveEdit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!id || !editName.trim()) return;
@@ -58,7 +56,6 @@ const CategoryDetail = () => {
     }
   };
 
-  // Función para Eliminar Categoría
   const handleDeleteCategory = async () => {
     if (events.length > 0) {
       alert(`No se puede eliminar la categoría porque tiene ${events.length} evento(s) asignado(s).`);
@@ -87,11 +84,9 @@ const CategoryDetail = () => {
       if (!id) return;
       try {
         setLoading(true);
-        // 1. Obtener información de la categoría
         const categoryData = await getCategoryById(id);
         setCategory(categoryData);
 
-        // 2. Obtener lista de eventos que pertenecen a la categoría
         const eventsResponse = await getAllEvents({ categoryId: id });
         setEvents(eventsResponse);
       } catch (err: any) {
@@ -110,65 +105,61 @@ const CategoryDetail = () => {
       {/* Botón de retroceso */}
       <Link
         to="/categories"
-        className="inline-flex items-center gap-2 text-slate-500 hover:text-blue-600 font-semibold mb-6 transition-colors group"
+        className="inline-flex items-center gap-2 text-slate-500 hover:text-blue-600 font-semibold mb-6 transition-colors group cursor-pointer"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 group-hover:-translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
         </svg>
-        Volver a Categorías
+        <span>Volver a Categorías</span>
       </Link>
 
-      {/* Cargando */}
       {loading ? (
         <div className="flex items-center justify-center py-20">
           <div className="animate-spin rounded-full h-10 w-10 border-4 border-blue-600 border-t-transparent"></div>
         </div>
       ) : errorMsg || !category ? (
-        // Error
-        <div className="p-4 bg-red-50 border border-red-100 rounded-2xl flex items-center gap-3">
+        <div className="p-5 bg-red-50 border border-red-200 rounded-xl flex items-center gap-3">
           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
           </svg>
           <span className="text-red-700 text-sm font-semibold">{errorMsg || "Categoría no encontrada."}</span>
         </div>
       ) : (
-        // Contenido Principal
         <div>
-          {/* Encabezado de la Categoría (Vista o Formulario de Edición) */}
-          <div className="bg-white border border-slate-200/80 rounded-3xl p-6 md:p-8 shadow-sm mb-10">
+          {/* Encabezado de la Categoría */}
+          <div className="bg-white border border-slate-200/90 rounded-3xl p-6 md:p-8 shadow-xl mb-10">
             {isEditing ? (
-              // FORMULARIO DE EDICIÓN
               <form onSubmit={handleSaveEdit} className="space-y-4">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold uppercase tracking-wider text-blue-600">Editar Categoría</span>
                   <button
                     type="button"
                     onClick={() => setIsEditing(false)}
-                    className="text-slate-400 hover:text-slate-600 text-xs font-bold uppercase tracking-wider"
+                    className="text-slate-500 hover:text-slate-800 text-xs font-bold uppercase tracking-wider cursor-pointer"
                   >
                     Cerrar
                   </button>
                 </div>
                 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-bold uppercase tracking-wider text-slate-500">Nombre de la categoría</label>
+                  <label className="text-xs font-bold uppercase tracking-wider text-slate-700">Nombre de la categoría</label>
                   <input
                     type="text"
                     required
                     value={editName}
                     onChange={(e) => setEditName(e.target.value)}
-                    className="w-full bg-slate-50 border border-slate-200/80 focus:border-blue-500 focus:bg-white text-slate-800 px-4 py-3 rounded-2xl text-sm font-medium outline-none transition-all"
+                    className="w-full bg-slate-50 border border-slate-200 focus:bg-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500/50 text-slate-900 px-4 py-3 rounded-xl text-sm font-medium outline-none transition-all"
                     placeholder="Nombre de la categoría"
                   />
                 </div>
                 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-bold uppercase tracking-wider text-slate-500">Descripción (Opcional)</label>
+                  <label className="text-xs font-bold uppercase tracking-wider text-slate-700">Descripción (Opcional)</label>
                   <textarea
                     rows={3}
                     value={editDescription}
                     onChange={(e) => setEditDescription(e.target.value)}
-                    className="w-full bg-slate-50 border border-slate-200/80 focus:border-blue-500 focus:bg-white text-slate-800 px-4 py-3 rounded-2xl text-sm font-medium outline-none transition-all resize-none"
+                    className="w-full bg-slate-50 border border-slate-200 focus:bg-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500/50 text-slate-900 px-4 py-3 rounded-xl text-sm font-medium outline-none transition-all resize-none"
                     placeholder="Descripción de la categoría..."
                   />
                 </div>
@@ -177,7 +168,7 @@ const CategoryDetail = () => {
                   <button
                     type="submit"
                     disabled={savingEdit}
-                    className="inline-flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-bold px-6 py-3 rounded-2xl tracking-wide transition-all shadow-sm hover:scale-[1.01] active:scale-[0.99] cursor-pointer disabled:opacity-50"
+                    className="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-bold px-6 py-3 rounded-xl tracking-wide transition-all shadow-md shadow-blue-600/20 cursor-pointer disabled:opacity-50"
                   >
                     {savingEdit ? (
                       <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
@@ -192,32 +183,30 @@ const CategoryDetail = () => {
                   <button
                     type="button"
                     onClick={() => setIsEditing(false)}
-                    className="inline-flex items-center justify-center bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-5 py-3 rounded-2xl tracking-wide transition-all cursor-pointer"
+                    className="inline-flex items-center justify-center bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-5 py-3 rounded-xl tracking-wide transition-all border border-slate-200 cursor-pointer"
                   >
                     Cancelar
                   </button>
                 </div>
               </form>
             ) : (
-              // VISTA NORMAL
               <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
                 <div>
-                  <span className="text-xs font-bold uppercase tracking-wider text-blue-600 bg-blue-50 border border-blue-100 rounded-full px-3 py-1">
+                  <span className="text-xs font-bold uppercase tracking-wider text-blue-700 bg-blue-50 border border-blue-200 rounded-full px-3.5 py-1">
                     Categoría
                   </span>
-                  <h1 className="text-3xl font-black text-slate-800 tracking-tight mt-3">{category.name}</h1>
-                  <p className="text-slate-500 text-sm md:text-base mt-2 max-w-2xl leading-relaxed">
+                  <h1 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight mt-3 font-heading">{category.name}</h1>
+                  <p className="text-slate-600 text-sm md:text-base mt-2 max-w-2xl leading-relaxed">
                     {category.description || "Esta categoría no posee una descripción cargada en el sistema."}
                   </p>
                 </div>
                 
-                {/* Botones de Acción para Administrador (Mismo estilo que Eventos) */}
                 {user?.role === "admin" && (
                   <div className="flex flex-wrap items-center gap-3 shrink-0">
                     <button
                       type="button"
                       onClick={handleStartEdit}
-                      className="grow sm:grow-0 inline-flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-bold px-6 py-3.5 rounded-2xl tracking-wide transition-all shadow-sm hover:scale-[1.01] active:scale-[0.99] cursor-pointer"
+                      className="grow sm:grow-0 inline-flex items-center justify-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold px-6 py-3.5 rounded-xl tracking-wide transition-all border border-slate-200 cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
@@ -229,10 +218,10 @@ const CategoryDetail = () => {
                       type="button"
                       disabled={deleting}
                       onClick={handleDeleteCategory}
-                      className="grow sm:grow-0 inline-flex items-center justify-center gap-2 bg-red-50 hover:bg-red-100 text-red-600 hover:text-red-700 font-bold px-6 py-3.5 rounded-2xl tracking-wide transition-all border border-red-100 disabled:opacity-50 cursor-pointer"
+                      className="grow sm:grow-0 inline-flex items-center justify-center gap-2 bg-red-50 hover:bg-red-100 text-red-600 font-bold px-6 py-3.5 rounded-xl tracking-wide transition-all border border-red-200 disabled:opacity-50 cursor-pointer"
                     >
                       {deleting ? (
-                        <div className="animate-spin rounded-full h-4 w-4 border-2 border-red-600 border-t-transparent"></div>
+                        <div className="animate-spin rounded-full h-4 w-4 border-2 border-red-500 border-t-transparent"></div>
                       ) : (
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -243,7 +232,7 @@ const CategoryDetail = () => {
 
                     <Link
                       to={`/events/new?categoryId=${category.id}`}
-                      className="grow sm:grow-0 inline-flex items-center justify-center gap-2 bg-linear-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold px-6 py-3.5 rounded-2xl tracking-wide transition-all shadow-md shadow-indigo-600/10 hover:scale-[1.01] active:scale-[0.99]"
+                      className="grow sm:grow-0 inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-bold px-6 py-3.5 rounded-xl tracking-wide transition-all shadow-md shadow-blue-600/20 hover:scale-[1.02] active:scale-[0.98]"
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
@@ -257,19 +246,17 @@ const CategoryDetail = () => {
           </div>
 
           {/* Listado de Eventos de la Categoría */}
-          <h2 className="text-2xl font-black text-slate-800 tracking-tight mb-6">Eventos Relacionados</h2>
+          <h2 className="text-2xl font-black text-slate-900 tracking-tight mb-6 font-heading">Eventos Relacionados</h2>
           
           {events.length === 0 ? (
-            // Lista vacía
-            <div className="text-center py-16 bg-slate-50 border border-dashed border-slate-200 rounded-3xl p-8">
+            <div className="text-center py-16 bg-white border border-dashed border-slate-300 rounded-2xl p-8 shadow-sm">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-slate-400 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
               </svg>
-              <h3 className="text-lg font-bold text-slate-700">Sin eventos</h3>
-              <p className="text-slate-500 text-sm mt-1">Aún no se han registrado eventos asociados a esta categoría.</p>
+              <h3 className="text-lg font-bold text-slate-900">Sin eventos</h3>
+              <p className="text-slate-600 text-sm mt-1">Aún no se han registrado eventos asociados a esta categoría.</p>
             </div>
           ) : (
-            // Grid de eventos
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {events.map((event) => (
                 <EventCard

@@ -2,7 +2,7 @@
 .loading-screen-container {
   position: fixed;
   inset: 0;
-  background-color: #f8fafc; /* bg-slate-50 para combinar con la página */
+  background-color: #f8fafc; /* Slate-50 light background */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -11,27 +11,27 @@
   z-index: 9999;
 }
 
-/* --- CUBO 3D (young-dragon-29 style) --- */
+/* --- CUBO 3D en Tonos de Azul --- */
 .spinner-cube {
-  width: 50px;
-  height: 50px;
-  animation: spinner-rotate-cube 2s infinite ease;
+  width: 54px;
+  height: 54px;
+  animation: spinner-rotate-cube 2.2s infinite ease-in-out;
   transform-style: preserve-3d;
 }
 
 .spinner-cube > div {
-  background-color: rgba(37, 99, 235, 0.08); /* Azul translúcido */
+  background-color: rgba(37, 99, 235, 0.08);
   height: 100%;
   position: absolute;
   width: 100%;
-  border: 2px solid #2563eb; /* Borde azul brillante */
-  box-shadow: 0 0 15px rgba(37, 99, 235, 0.15);
-  border-radius: 8px;
+  border: 2px solid #2563eb;
+  box-shadow: 0 0 15px rgba(37, 99, 235, 0.2);
+  border-radius: 10px;
 }
 
 /* Posicionamiento en 3D de cada cara del cubo */
 .spinner-cube div:nth-of-type(1) {
-  transform: translateZ(-25px) rotateY(180deg);
+  transform: translateZ(-27px) rotateY(180deg);
 }
 
 .spinner-cube div:nth-of-type(2) {
@@ -55,7 +55,7 @@
 }
 
 .spinner-cube div:nth-of-type(6) {
-  transform: translateZ(25px);
+  transform: translateZ(27px);
 }
 
 @keyframes spinner-rotate-cube {
@@ -70,13 +70,14 @@
   }
 }
 
-/* --- TEXT CAROUSEL (fresh-lizard-20 style) --- */
+/* --- TEXT CAROUSEL --- */
 .words-container {
   display: flex;
   align-items: center;
-  font-family: "Outfit", sans-serif;
+  font-family: inherit;
   font-weight: 700;
-  font-size: 24px;
+  font-size: 22px;
+  letter-spacing: -0.01em;
   color: #64748b; /* slate-500 */
   height: 40px;
   padding: 0 10px;
@@ -115,7 +116,7 @@
   display: block;
   height: 100%;
   padding-left: 8px;
-  color: #4f46e5; /* indigo-600 */
+  color: #2563eb; /* blue-600 */
   white-space: nowrap;
 }
 
@@ -136,7 +137,7 @@
   58% {
     transform: translateY(-200%);
   }
-  60%, 75% {
+  59%, 75% {
     transform: translateY(-302%);
   }
   78% {
