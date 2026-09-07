@@ -49,14 +49,20 @@ export const AppRouter = createBrowserRouter([
         path: '/events/:id',
         element: <EventDetail />,
       },
-      // 1. Rutas protegidas para cualquier usuario autenticado (Nivel 1)
+      // 1. Rutas protegidas para cualquier usuario autenticado
       {
-        element: <ProtectedRoute allowedRoles={["admin"]} />,
+        element: <ProtectedRoute />,
         children: [
           {
             path: '/favorites',
             element: <FavoritesList />,
           },
+        ]
+      },
+      // 2. Rutas protegidas exclusivas para rol Admin
+      {
+        element: <ProtectedRoute allowedRoles={["admin"]} />,
+        children: [
           {
             path: '/events/new',
             element: <EventForm />,
@@ -64,13 +70,7 @@ export const AppRouter = createBrowserRouter([
           {
             path: '/events/edit/:id',
             element: <EventForm />,
-          }
-        ]
-      },
-      // 2. Rutas protegidas exclusivas para rol Admin (Nivel 2)
-      {
-        element: <ProtectedRoute allowedRoles={["admin"]} />,
-        children: [
+          },
           {
             path: '/categories/new',
             element: <CreateCategory />
